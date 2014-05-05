@@ -1,0 +1,51 @@
+package net.c0nan.csv;
+
+public class CSVUtils
+{
+
+  public static final String regexForSplit = "(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
+
+  public static String delimiter = ",";
+
+  public static String doStripLineBreaks(String line)
+  {
+
+    line = line.replaceAll("[\n\r]", "");
+    line = line.replaceAll("[\r\n]", "");
+    line = line.replaceAll("[\r]", "");
+    line = line.replaceAll("[\n]", "");
+    return line;
+
+  }
+
+  public static String getSplitRegex()
+  {
+    return getSplitRegex(delimiter);
+  }
+
+  public static String getSplitRegex(String delimiter)
+  {
+    return delimiter + CSVUtils.regexForSplit;
+  }
+
+  public static String stripFirstValue(String line)
+  {
+
+    String[] arrCSV = line.split(delimiter + regexForSplit, -1);
+
+    StringBuilder stringBuilder = new StringBuilder();
+
+    for (int i = 1; i < arrCSV.length; i++)
+    {
+      stringBuilder.append(arrCSV[i]).append(",");
+    }
+
+    if ( stringBuilder.length() > 0 )
+    {
+      stringBuilder.setLength(stringBuilder.length() - 1);
+    }
+
+    return stringBuilder.toString();
+
+  }
+}
