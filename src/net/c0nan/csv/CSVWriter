@@ -1,0 +1,71 @@
+package net.c0nan.csv;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CSVWriter
+{
+  
+  private Writer writer = null;
+  private BufferedWriter bufferedWriter = null;
+  private String outputFile = "c0nan_csv_" + new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis())) + ".csv";
+  private boolean stripLineBreaks = true;
+  
+  public CSVWriter(String outputFile) throws IOException
+  {
+    this(outputFile,true);
+  }
+  public CSVWriter(String outputFile,boolean append) throws IOException
+  {
+    this(new FileWriter(outputFile,append),true);
+  }
+  
+  public CSVWriter(Writer writer){
+    this(writer,true);
+  }
+
+  public CSVWriter(Writer writer, boolean stripLineBreaks)
+  {
+    super();
+    this.writer = writer;
+    bufferedWriter = new BufferedWriter(writer);
+  }
+
+  public void writeLine(String line) throws IOException{
+    if (stripLineBreaks){
+      line = CSVUtils.doStripLineBreaks(line);
+    }
+
+    bufferedWriter.write(line + "\r\n");
+    
+  }
+  
+  public void close() throws IOException{
+    if (bufferedWriter != null){
+      bufferedWriter.close();
+    }
+    if (writer != null){
+      writer.close();
+    }
+  }
+  
+  
+  @Override
+  protected void finalize() throws Throwable
+  {
+    super.finalize();
+    close();
+  }
+  
+  
+  
+  
+  
+  
+  
+
+}
